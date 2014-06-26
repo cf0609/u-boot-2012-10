@@ -124,6 +124,7 @@ static int init_baudrate(void)
 static int display_banner(void)
 {
 	/*cf*/
+	printf("\r\n");
 	printf("#####################################\n");
 	printf("#          WIT for MINI210S         #\n");
 	printf("#####################################\n");

@@ -89,6 +89,48 @@ struct s5pc110_clock {
 	unsigned int	gate_sclk0;
 	unsigned int	gate_sclk1;
 };
+
+/* add by cf */
+struct s5pv210_clock {
+	unsigned int	apll_lock;
+	unsigned char	res1[0x04];
+	unsigned int	mpll_lock;
+	unsigned char	res2[0x04];
+	unsigned int	epll_lock;
+	unsigned char	res3[0x0C];
+	unsigned int	vpll_lock;
+	unsigned char	res4[0xdc];
+	unsigned int	apll_con0;
+	unsigned int	apll_con1;
+	unsigned int	mpll_con;
+	unsigned char	res5[0x04];
+	unsigned int	epll_con0;
+	unsigned int	epll_con1;
+	unsigned char	res6[0x08];
+	unsigned int	vpll_con;
+	unsigned char	res7[0xdc];
+	unsigned int	src0;
+	unsigned int	src1;
+	unsigned int	src2;
+	unsigned int	src3;
+	unsigned int	src4;
+	unsigned int	src5;
+	unsigned int	src6;
+	unsigned char	res8[0x64];
+	unsigned int	mask0;
+	unsigned int	mask1;
+	unsigned char	res9[0x78];
+	unsigned int	div0;
+	unsigned int	div1;
+	unsigned int	div2;
+	unsigned int	div3;
+	unsigned int	div4;
+	unsigned int	div5;
+	unsigned int	div6;
+	unsigned int	div7;
+};
+
+
 #endif
 
 #endif

@@ -50,12 +50,12 @@
 #define CLK_DIV6_OFFSET			0x318
 #define CLK_DIV7_OFFSET			0x31c
 #define CLK_DIV0_MASK			0x7fffffff
-#define APLL_MDIV      	 		0x7d
-#define APLL_PDIV       		0x3
+#define APLL_MDIV      	 		250
+#define APLL_PDIV       		6
 #define APLL_SDIV       		0x1
-#define MPLL_MDIV				0x29b
-#define MPLL_PDIV				0xc
-#define MPLL_SDIV				0x1
+#define MPLL_MDIV			667
+#define MPLL_PDIV			12
+#define MPLL_SDIV			1
 #define set_pll(mdiv, pdiv, sdiv)	(1<<31 | mdiv<<16 | pdiv<<8 | sdiv)
 #define APLL_VAL			set_pll(APLL_MDIV,APLL_PDIV,APLL_SDIV)
 #define MPLL_VAL			set_pll(MPLL_MDIV,MPLL_PDIV,MPLL_SDIV)
@@ -74,6 +74,7 @@ _TEXT_BASE:
 	.globl lowlevel_init
 lowlevel_init:
 	mov	r9, lr
+	bl	system_clock_init
 #if 0
 	/* r5 has always zero */
 	mov	r5, #0
@@ -120,7 +121,7 @@ lowlevel_init:
 1:
 #endif
 //debug
-#if 1
+#if 0
 	ldr r1, =0xE0200280 					
 	ldr r0, =0x00001111
 	str r0, [r1]
@@ -140,7 +141,7 @@ lowlevel_init:
  * void system_clock_init(void)
  */
 system_clock_init:
-	ldr	r8, =S5PV210_CLOCK_BASE		@ 0xE0100000
+	ldr	r0, =S5PV210_CLOCK_BASE		@ 0xE0100000
 	/*seting clock off,and not use PLL*/
 	ldr	r1,=0x0
 	str	r1, [r0, #CLK_SRC0_OFFSET]	

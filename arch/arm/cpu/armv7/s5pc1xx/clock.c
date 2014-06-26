@@ -89,6 +89,63 @@ static unsigned long s5pc100_get_pll_clk(int pllreg)
 	return fout;
 }
 
+/* s5pv210: return pll clock frequency(add by cf) */
+static unsigned long s5pv210_get_pll_clk(int pllreg)
+{
+	struct s5pv210_clock *clk =
+		(struct s5pv210_clock *)samsung_get_base_clock();
+	unsigned long r, m, p, s, mask, fout;
+	unsigned int freq;
+
+	switch (pllreg) {
+	case APLL:
+		r = readl(&clk->apll_con0);
+		break;
+	case MPLL:
+		r = readl(&clk->mpll_con);
+		break;
+	case EPLL:
+		r = readl(&clk->epll_con0);
+		break;
+	case VPLL:
+		r = readl(&clk->vpll_con);
+		break;
+	default:
+		printf("Unsupported PLL (%d)\n", pllreg);
+		return 0;
+	}
+
+	/*
+	 * APLL_CON0: MIDV [25:16]
+	 * MPLL_CON:  MIDV [25:16]
+	 * EPLL_CON0: MIDV [24:16]
+	 * VPLL_CON:  MIDV [24:16]
+	 */
+	if (pllreg == APLL || pllreg == MPLL)
+		mask = 0x3ff;
+	else
+		mask = 0x1ff;
+
+	m = (r >> 16) & mask;
+
+	/* PDIV [13:8] */
+	p = (r >> 8) & 0x3f;
+	/* SDIV [2:0] */
+	s = r & 0x7;
+
+	freq = CONFIG_SYS_CLK_FREQ_V210;
+	if (pllreg == APLL) {
+		if (s < 1)
+			s = 1;
+		/* FOUT = MDIV * FIN / (PDIV * 2^(SDIV - 1)) */
+		fout = m * (freq / (p * (1 << (s - 1))));
+	} else
+		/* FOUT = MDIV * FIN / (PDIV * 2^SDIV) */
+		fout = m * (freq / (p * (1 << s)));
+
+	return fout;
+}
+
 /* s5pc100: return pll clock frequency */
 static unsigned long s5pc110_get_pll_clk(int pllreg)
 {
@@ -145,6 +202,29 @@ static unsigned long s5pc110_get_pll_clk(int pllreg)
 
 	return fout;
 }
+
+/* s5pv210: return ARM clock frequency (add by cf) */
+static unsigned long s5pv210_get_arm_clk(void)
+{
+	struct s5pv210_clock *clk =
+		(struct s5pv210_clock *)samsung_get_base_clock();
+	unsigned long div;
+	unsigned long dout_apll, armclk;
+	unsigned int apll_ratio;
+
+	div = readl(&clk->div0);
+
+	/* APLL_RATIO: [2:0] */
+	apll_ratio = div & 0x7;
+
+	dout_apll = get_pll_clk(APLL) / (apll_ratio + 1);
+	armclk = dout_apll;
+
+	return armclk;
+}
+
+
+
 
 /* s5pc110: return ARM clock frequency */
 static unsigned long s5pc110_get_arm_clk(void)
@@ -313,18 +393,24 @@ static unsigned long s5pc1xx_get_pwm_clk(void)
 
 unsigned long get_pll_clk(int pllreg)
 {
+	return s5pv210_get_pll_clk(pllreg);  /*cf*/
+#if 0
 	if (cpu_is_s5pc110())
 		return s5pc110_get_pll_clk(pllreg);
 	else
 		return s5pc100_get_pll_clk(pllreg);
+#endif
 }
 
 unsigned long get_arm_clk(void)
 {
+	s5pv210_get_arm_clk();  /*cf*/
+#if 0
 	if (cpu_is_s5pc110())
 		return s5pc110_get_arm_clk();
 	else
 		return s5pc100_get_arm_clk();
+#endif
 }
 
 unsigned long get_pwm_clk(void)

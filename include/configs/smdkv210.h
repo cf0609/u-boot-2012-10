@@ -56,6 +56,7 @@
 
 /* input clock of PLL: SMDKC100 has 12MHz input clock */
 #define CONFIG_SYS_CLK_FREQ		24000000     /*modied by cf*/
+#define CONFIG_SYS_CLK_FREQ_V210 		24000000     /*modied by cf*/
 
 /* DRAM Base */
 #define CONFIG_SYS_SDRAM_BASE		0x20000000    /*modied by cf*/
@@ -89,7 +90,13 @@
  * Command definition
  ***********************************************************/
 #include <config_cmd_default.h>
+/*cf add*/
+#define CONFIG_AUTO_COMPLETE
+#define CONFIG_CMDLINE_EDITING
 
+
+
+////////////////////////////
 #undef CONFIG_CMD_FLASH
 #undef CONFIG_CMD_IMLS
 #undef CONFIG_CMD_NAND
@@ -243,10 +250,27 @@
  * Ethernet Contoller driver
  */
 #ifdef CONFIG_CMD_NET
+#define CONFIG_ENV_SROM_BANK	1
+#define CONFIG_DRIVER_DM9000
+#define CONFIG_DM9000_NO_SROM
+#define CONFIG_DM9000_BASE       0x88000000
+#define DM9000_IO                (CONFIG_DM9000_BASE)
+#define DM9000_DATA				 (CONFIG_DM9000_BASE+0x4)
+#define CONFIG_IPADDR            192.168.0.12
+#define CONFIG_SERVERIP          192.168.0.13
+#define CONFIG_ETHADDR           1a:2a:3a:4a:5a:6a
+#define CONFIG_CMD_PING          
+
+
+#if 0
 #define CONFIG_SMC911X         1       /* we have a SMC9115 on-board   */
 #define CONFIG_SMC911X_16_BIT  1       /* SMC911X_16_BIT Mode          */
 #define CONFIG_SMC911X_BASE    0x98800300      /* SMC911X Drive Base   */
 #define CONFIG_ENV_SROM_BANK   3       /* Select SROM Bank-3 for Ethernet*/
+#endif
+
+
+
 #endif /* CONFIG_CMD_NET */
 
 #endif	/* __CONFIG_H */
