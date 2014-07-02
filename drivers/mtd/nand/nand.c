@@ -87,7 +87,6 @@ static void nand_init_chip(int i)
 
 	mtd->priv = nand;
 	nand->IO_ADDR_R = nand->IO_ADDR_W = (void  __iomem *)base_addr;
-
 	if (board_nand_init(nand))
 		return;
 
@@ -104,12 +103,12 @@ void nand_init(void)
 	board_nand_init();
 #else
 	int i;
-
 	for (i = 0; i < CONFIG_SYS_MAX_NAND_DEVICE; i++)
 		nand_init_chip(i);
 #endif
 
-	printf("%lu MiB\n", total_nand_size / 1024);
+//	printf("%lu MiB\n", total_nand_size / 1024);
+	printf("%lu GB\n", total_nand_size / (1024*1024));
 
 #ifdef CONFIG_SYS_NAND_SELECT_DEVICE
 	/*

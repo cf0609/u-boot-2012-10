@@ -107,12 +107,6 @@ IS_SAMSUNG_TYPE(s5pc110, 0xc110)
 #define SAMSUNG_BASE(device, base)				\
 static inline unsigned int samsung_get_base_##device(void)	\
 {		return S5PV210_##base;						\
-	if (cpu_is_s5pc100())					\
-		return S5PC100_##base;				\
-	else if (cpu_is_s5pc110())				\
-		return S5PC110_##base;				\
-	else                                    \
-		return 0;					        \
 }
 
 SAMSUNG_BASE(clock, CLOCK_BASE)
@@ -123,6 +117,7 @@ SAMSUNG_BASE(sromc, SROMC_BASE)
 SAMSUNG_BASE(timer, PWMTIMER_BASE)
 SAMSUNG_BASE(uart, UART_BASE)
 SAMSUNG_BASE(watchdog, WATCHDOG_BASE)
+SAMSUNG_BASE(nand,NAND_BASE)
 #endif
 
 #endif	/* _S5PC1XX_CPU_H */

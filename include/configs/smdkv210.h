@@ -94,6 +94,11 @@
 #define CONFIG_AUTO_COMPLETE
 #define CONFIG_CMDLINE_EDITING
 
+/*cf add code */
+#define CONFIG_SYS_MAX_NAND_DEVICE    1
+#define CONFIG_SYS_NAND_BASE          0xB0E00000
+#define CONFIG_NAND_S5PV210
+
 
 
 ////////////////////////////
@@ -103,7 +108,9 @@
 
 #define CONFIG_CMD_CACHE
 #define CONFIG_CMD_REGINFO
-#define CONFIG_CMD_ONENAND
+/*cf */
+//#define CONFIG_CMD_ONENAND
+#define CONFIG_CMD_NAND
 #define CONFIG_CMD_ELF
 #define CONFIG_CMD_FAT
 #define CONFIG_CMD_MTDPARTS
@@ -232,15 +239,16 @@
  * Boot configuration
  */
 /*#define CONFIG_ENV_IS_IN_ONENAND	1*/
-#define CONFIG_ENV_IS_NOWHERE
+#define CONFIG_ENV_IS_IN_NAND              1
+//#define CONFIG_ENV_IS_NOWHERE
 #define CONFIG_ENV_SIZE			(128 << 10)	/* 128KiB, 0x20000 */
 #define CONFIG_ENV_ADDR			(256 << 10)	/* 256KiB, 0x40000 */
 #define CONFIG_ENV_OFFSET		(256 << 10)	/* 256KiB, 0x40000 */
-
+#if 0
 #define CONFIG_USE_ONENAND_BOARD_INIT
 #define CONFIG_SAMSUNG_ONENAND		1
 #define CONFIG_SYS_ONENAND_BASE		0xE7100000
-
+#endif 
 #define CONFIG_DOS_PARTITION		1
 
 //#define CONFIG_SYS_INIT_SP_ADDR	        0x21000000    /*0k but not all run*/

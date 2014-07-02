@@ -527,7 +527,6 @@ static void nand_command(struct mtd_info *mtd, unsigned int command,
 	register struct nand_chip *chip = mtd->priv;
 	int ctrl = NAND_CTRL_CLE | NAND_CTRL_CHANGE;
 	uint32_t rst_sts_cnt = CONFIG_SYS_NAND_RESET_CNT;
-
 	/*
 	 * Write out the command to the device.
 	 */
@@ -548,6 +547,7 @@ static void nand_command(struct mtd_info *mtd, unsigned int command,
 		chip->cmd_ctrl(mtd, readcmd, ctrl);
 		ctrl &= ~NAND_CTRL_CHANGE;
 	}
+	   
 	chip->cmd_ctrl(mtd, command, ctrl);
 
 	/*

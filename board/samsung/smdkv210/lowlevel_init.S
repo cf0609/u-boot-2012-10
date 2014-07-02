@@ -153,7 +153,7 @@ system_clock_init:
 
 	/*Seting divo*/
 	/*clear bit[0~31]*/
-	ldr r1, [r0, #CLK_DIV0_OFFSET]
+	ldr r1, [r0, #CLK_DIV0_OFFSET]  //0x300
 	ldr	r2, =CLK_DIV0_MASK
 	bic	r1, r1, r2	
 	ldr	r2, =0x14131440	
